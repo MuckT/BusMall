@@ -1,10 +1,7 @@
 'use strict';
 
-// Product Display Div
-var allProductsDisplay = document.querySelector('#product-display');
-
 // Return Node List of Products Displayed
-var individualProductsNodes = document.querySelectorAll('#product-display img');
+var individualProductNodes = document.querySelectorAll('#product-display img');
 
 // Store Total Clicks
 var totalClicks = 0;
@@ -19,7 +16,7 @@ const allProducts = [];
 var Product = function (name, altText, fileExtension = '.jpg') {
   this.name = name;
   this.clicks = 0;
-  this.timesShown = 0;
+  this.displayed = 0;
   this.fileExtension = fileExtension;
   this.src = `img/${this.name + this.fileExtension}`;
   this.altText = altText;
@@ -29,9 +26,11 @@ var Product = function (name, altText, fileExtension = '.jpg') {
 // Render New Products
 function renderNewProducts(indexArray = allProducts.slice(0, 3)) {
   indexArray.forEach((element, index) => {
-    individualProductsNodes[index].fileExtension = element.fileExtension;
-    individualProductsNodes[index].alt = element.altText;
-    individualProductsNodes[index].src = element.src;
+    individualProductNodes[index].name = element.name;
+    individualProductNodes[index].alt = element.altText;
+    individualProductNodes[index].src = element.src;
+    individualProductNodes[index].fileExtension = element.fileExtension;
+    individualProductNodes[index].clicks = element.clicks;
   });
 }
 
@@ -58,22 +57,37 @@ function renderVoteResults() {
   let clickResults = document.querySelector('#results-pane > ul');
   allProducts.forEach(element => {
     let result = document.createElement('li');
-    result.textContent = `${element.name} received ${element.clicks}`;
+    result.textContent = `${element.name} had ${element.clicks} clicks, \n and was seen ${element.displayed}`;
     clickResults.append(result);
   });
 }
 
-// Event Handler TODO
-// function clickHandler(e) {
-//   e.preventDefault();
-//   totalClicks ++;
-//   if (e.target === Image) {
-//     alert('please click an image');
-//     totalClicks --;
-//   }
-// }
+// Event Handler
+function clickHandler(e) {
+  individualProductNodes.forEach(element => {
+    if(element === e.target) {
+      allProducts.forEach(product => {
+        if(product.name === element.name) {
+          product.clicks++;
+        }
+      });
+      allProducts.forEach(product => {
+        if(productsOnPage.includes(product)){
+          product.displayed++;
+        }
+      });
+      pickNewProducts();
+      totalClicks++;
+    }
+  });
+  if (totalClicks === 10) {
+    document.body.removeEventListener('click', clickHandler);
+    renderVoteResults();
+  }
+}
 
-// allProductsDisplay.addEventListener('click', clickHandler);
+// Attach Event Listener
+document.body.addEventListener('click', clickHandler);
 
 // Create Products
 new Product('bag', 'R2D2 Rolling Bag');
@@ -98,4 +112,3 @@ new Product('water-can', 'Perpetual Water Can');
 new Product('wine-glass', 'A Useless Glass');
 
 pickNewProducts();
-renderVoteResults();
