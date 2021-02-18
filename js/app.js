@@ -54,7 +54,7 @@ function pickNewProducts() {
 
 // Render Vote Results
 function renderVoteResults() {
-  let clickResults = document.querySelector('#results-pane > ul');
+  let clickResults = document.querySelector('#view-results> ul');
   allProducts.forEach(element => {
     let result = document.createElement('li');
     result.textContent = `${element.name} had ${element.clicks} clicks, \n and was seen ${element.displayed}`;
@@ -80,13 +80,26 @@ function clickHandler(e) {
       totalClicks++;
     }
   });
-  if (totalClicks === 25) {
+  if (totalClicks === 5) {
     document.body.removeEventListener('click', clickHandler);
-    renderVoteResults();
+    let resultsContainer = document.querySelector('#view-results ul');
+    let button = document.createElement('button');
+    button.textContent = 'View Results';
+    button.addEventListener('click', buttonHandler);
+    resultsContainer.append(button);
   }
 }
 
-// Attach Event Listener
+function buttonHandler() {
+  let resultsContainer = document.querySelector('#view-results ul');
+  let button = document.querySelector('#view-results button');
+  resultsContainer.removeChild(button);
+  button.removeEventListener('click', buttonHandler);
+  renderVoteResults();
+}
+
+
+// Attach Event Listeners
 document.body.addEventListener('click', clickHandler);
 
 // Create Products

@@ -106,6 +106,10 @@ main h3 {
   font-size: 20px;
 }
 
+#view-results {
+  font-size:18px;
+}
+
 /* Footer */
 footer {
   grid-area: footer;
