@@ -10,7 +10,7 @@ var individualProductsNodes = document.querySelectorAll('#product-display img');
 var totalClicks = 0;
 
 // Store Images That Are Currently Displayed
-const productsOnPage = [];
+var productsOnPage = [];
 
 // Store All Products
 const allProducts = [];
@@ -35,8 +35,23 @@ function renderNewProducts(indexArray = allProducts.slice(0, 3)) {
   });
 }
 
-// Pick New Products TODO
+// Generate random Product
+function generateRandomProduct() {
+  return allProducts[Math.floor(Math.random() * allProducts.length)];
+}
 
+// Pick New Products
+function pickNewProducts() {
+  let pickedProducts = [];
+  while (pickedProducts.length < 3) {
+    let tempProduct = generateRandomProduct();
+    if(!productsOnPage.includes(tempProduct) && !pickedProducts.includes(tempProduct)) {
+      pickedProducts.push(tempProduct);
+    }
+  }
+  productsOnPage = pickedProducts;
+  renderNewProducts(pickedProducts);
+}
 
 // Render Vote Results
 function renderVoteResults() {
@@ -82,5 +97,5 @@ new Product('usb', 'Tentical USB', '.gif');
 new Product('water-can', 'Perpetual Water Can');
 new Product('wine-glass', 'A Useless Glass');
 
-renderNewProducts();
+pickNewProducts();
 renderVoteResults();
