@@ -28,10 +28,9 @@ var Product = function (name, altText, fileExtension = '.jpg') {
 
 // Render New Products
 function renderNewProducts(indexArray = allProducts.slice(0, 3)) {
-  console.log(indexArray);
   indexArray.forEach((element, index) => {
     individualProductsNodes[index].fileExtension = element.fileExtension;
-    individualProductsNodes[index].alt = element.alt;
+    individualProductsNodes[index].alt = element.altText;
     individualProductsNodes[index].src = element.src;
   });
 }
