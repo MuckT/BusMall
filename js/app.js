@@ -80,7 +80,7 @@ function clickHandler(e) {
       totalClicks++;
     }
   });
-  if (totalClicks === 10) {
+  if (totalClicks === 25) {
     document.body.removeEventListener('click', clickHandler);
     renderVoteResults();
   }
