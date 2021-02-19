@@ -39,9 +39,7 @@ function adjustCSS(numberOfImages = totalImagesToDisplay) {
   } else if (numberOfImages % 3 === 0) {
     numberOfColumns = 3;
   }
-  if (window.innerWidth > 520 && window.innerWidth < 1020) {
-    document.querySelector('main ul').style['grid-template-columns'] = `${'1fr '.repeat(numberOfColumns - 1)}`;
-  } else if (window.innerWidth > 1020) {
+  if (window.innerWidth > 520) {
     document.querySelector('main ul').style['grid-template-columns'] = `${'1fr '.repeat(numberOfColumns)}`;
   }
 }
@@ -76,16 +74,6 @@ function pickNewProducts() {
   renderNewProducts(pickedProducts);
 }
 
-// Render Vote Results
-function renderVoteResults() {
-  let clickResults = document.querySelector('#view-results> ul');
-  allProducts.forEach(element => {
-    let result = document.createElement('li');
-    result.textContent = `${element.name} had ${element.clicks} clicks, \n and was seen ${element.displayed}`;
-    clickResults.append(result);
-  });
-}
-
 // Click Event Handler
 function clickHandler(e) {
   individualProductNodes.forEach(element => {
@@ -106,22 +94,25 @@ function clickHandler(e) {
   });
   if (totalClicks === requestedNumberOfClicks) {
     document.body.removeEventListener('click', clickHandler);
-    let resultsContainer = document.querySelector('#view-results ul');
+    let resultsContainer = document.querySelector('#view-results');
     let button = document.createElement('button');
     button.textContent = 'View Results';
     button.addEventListener('click', buttonHandler);
-    resultsContainer.append(button);
+    resultsContainer.prepend(button);
   }
 }
 
 // Button Event Handler
 function buttonHandler() {
-  let resultsContainer = document.querySelector('#view-results ul');
+  let resultsContainer = document.querySelector('#view-results');
   let button = document.querySelector('#view-results button');
   resultsContainer.removeChild(button);
   button.removeEventListener('click', buttonHandler);
-  renderVoteResults();
+  makeProductChart();
 }
+
+// Resize Event Handler TODO
+
 
 // Create Products
 new Product('bag', 'R2D2 Rolling Bag');
@@ -152,3 +143,51 @@ pickNewProducts();
 
 // Attach Click Img Click Event Listener
 document.body.addEventListener('click', clickHandler);
+
+// ==================================
+// ChartJs Implementation
+// ==================================
+
+function makeProductChart() {
+  var productData = [[],[],[]];
+
+  allProducts.forEach(product => {
+    productData[0].push(product.name);
+    productData[1].push(product.clicks);
+    productData[2].push(product.displayed);
+  });
+
+  console.table(productData);
+  var ctx = document.querySelector('#myChart').getContext('2d');
+  var chart = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: [{
+      labels: productData[0],
+      datasets: [
+        {
+          label: 'Product Clicks',
+          data: productData[1],
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        },
+        {
+          label: 'Times Shown',
+          data: productData[2],
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }
+      ]
+    }],
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}

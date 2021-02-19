@@ -68,12 +68,11 @@ main {
   width: 100%;
 }
 
-main ul {
+main ul, #view-results {
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 30px;
   padding: 10px;
-  border: solid 1px black;
 }
 
 img {
@@ -93,12 +92,11 @@ main h1, h2 {
 
 main h1 {
   height: 50px;
-  border: solid 1px black;
   font-size: 22px;
 }
 
 main h2 {
-  margin: 15px auto 15px auto;
+  margin: 15px auto;
 }
 
 main h3 {
