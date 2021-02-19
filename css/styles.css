@@ -64,7 +64,7 @@ main {
   grid-area: main;
   overflow: auto;
   max-width: 1140px;
-  margin: 0 auto 0 auto;
+  margin: 0 auto;
   width: 100%;
 }
 
@@ -72,7 +72,6 @@ main ul {
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 30px;
-  /* margin: 15px auto; */
   padding: 10px;
   border: solid 1px black;
 }
@@ -123,9 +122,6 @@ footer a {
 
 /* Desktop Media Query */
 @media (min-width: 520px) {
-  main ul {
-    grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
-  }
   main {
     width: 80%;
   }
