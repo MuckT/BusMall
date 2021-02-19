@@ -79,12 +79,10 @@ function clickHandler(e) {
   individualProductNodes.forEach(element => {
     if(element === e.target) {
       allProducts.forEach(product => {
-        if(product.name === element.name) {
+        if(product.name === element.name && productsOnPage.includes(product)) {
           product.clicks++;
-        }
-      });
-      allProducts.forEach(product => {
-        if(productsOnPage.includes(product)){
+          product.displayed++;
+        } else if(productsOnPage.includes(product)){
           product.displayed++;
         }
       });
@@ -110,9 +108,6 @@ function buttonHandler() {
   button.removeEventListener('click', buttonHandler);
   makeProductChart();
 }
-
-// Resize Event Handler TODO
-
 
 // Create Products
 new Product('bag', 'R2D2 Rolling Bag');
