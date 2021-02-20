@@ -1,6 +1,6 @@
 'use strict';
 
-// Globals
+// Globals  
 var totalClicks = 0;
 const totalImagesToDisplay = 3;
 const requestedNumberOfClicks = 25;
@@ -144,19 +144,20 @@ document.body.addEventListener('click', clickHandler);
 // ==================================
 
 function makeProductChart() {
-  var productData = [[],[],[]];
+  // [[Names],[Clicks],[Displayed],[% of Clicks vs Display] 
+  var productData = [[],[],[],[]];
 
   allProducts.forEach(product => {
     productData[0].push(product.name);
     productData[1].push(product.clicks);
     productData[2].push(product.displayed);
+    productData[3].push((product.clicks / product.displayed) * 100)
   });
 
-  console.table(productData);
-  var ctx = document.querySelector('#myChart').getContext('2d');
-  var chart = new Chart(ctx, {
-    type: 'horizontalBar',
-    data: [{
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
       labels: productData[0],
       datasets: [
         {
@@ -164,25 +165,41 @@ function makeProductChart() {
           data: productData[1],
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 1
+          borderWidth: 1,
+          yAxisID: 'first-y-axis'
         },
         {
           label: 'Times Shown',
           data: productData[2],
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 1
+          backgroundColor: 'rgba(51, 188, 255, 0.2)',
+          borderColor: 'rgba(51, 56, 255, 1)',
+          borderWidth: 1,
+          yAxisID: 'first-y-axis'
+        },
+        {
+          label: 'Percent Clicked for Times Shown',
+          data: productData[3],
+          backgroundColor: 'rgba(186, 51, 255, 0.2)',
+          borderColor: 'rgba(120, 21, 229, 0.2)',
+          borderWidth: 1,
+          yAxisID: 'second-y-axis'
         }
       ]
-    }],
+    },
     options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true
-          }
-        }]
-      }
+        scales: {
+          yAxes: [{
+            id: 'first-y-axis',
+            type: 'linear',
+            ticks: {
+              beginAtZero: true
+              }
+            }, {
+            id: 'second-y-axis',
+            type: 'linear'
+            }
+          ]
+        }
     }
-  });
+  })
 }
