@@ -1,6 +1,6 @@
 'use strict';
 
-// Globals
+// Globals  
 var totalClicks = 0;
 const totalImagesToDisplay = 3;
 const requestedNumberOfClicks = 25;
@@ -39,9 +39,7 @@ function adjustCSS(numberOfImages = totalImagesToDisplay) {
   } else if (numberOfImages % 3 === 0) {
     numberOfColumns = 3;
   }
-  if (window.innerWidth > 520 && window.innerWidth < 1020) {
-    document.querySelector('main ul').style['grid-template-columns'] = `${'1fr '.repeat(numberOfColumns - 1)}`;
-  } else if (window.innerWidth > 1020) {
+  if (window.innerWidth > 520) {
     document.querySelector('main ul').style['grid-template-columns'] = `${'1fr '.repeat(numberOfColumns)}`;
   }
 }
@@ -76,27 +74,15 @@ function pickNewProducts() {
   renderNewProducts(pickedProducts);
 }
 
-// Render Vote Results
-function renderVoteResults() {
-  let clickResults = document.querySelector('#view-results> ul');
-  allProducts.forEach(element => {
-    let result = document.createElement('li');
-    result.textContent = `${element.name} had ${element.clicks} clicks, \n and was seen ${element.displayed}`;
-    clickResults.append(result);
-  });
-}
-
 // Click Event Handler
 function clickHandler(e) {
   individualProductNodes.forEach(element => {
     if(element === e.target) {
       allProducts.forEach(product => {
-        if(product.name === element.name) {
+        if(product.name === element.name && productsOnPage.includes(product)) {
           product.clicks++;
-        }
-      });
-      allProducts.forEach(product => {
-        if(productsOnPage.includes(product)){
+          product.displayed++;
+        } else if(productsOnPage.includes(product)){
           product.displayed++;
         }
       });
@@ -106,21 +92,21 @@ function clickHandler(e) {
   });
   if (totalClicks === requestedNumberOfClicks) {
     document.body.removeEventListener('click', clickHandler);
-    let resultsContainer = document.querySelector('#view-results ul');
+    let resultsContainer = document.querySelector('#view-results');
     let button = document.createElement('button');
     button.textContent = 'View Results';
     button.addEventListener('click', buttonHandler);
-    resultsContainer.append(button);
+    resultsContainer.prepend(button);
   }
 }
 
 // Button Event Handler
 function buttonHandler() {
-  let resultsContainer = document.querySelector('#view-results ul');
+  let resultsContainer = document.querySelector('#view-results');
   let button = document.querySelector('#view-results button');
   resultsContainer.removeChild(button);
   button.removeEventListener('click', buttonHandler);
-  renderVoteResults();
+  makeProductChart();
 }
 
 // Create Products
@@ -152,3 +138,68 @@ pickNewProducts();
 
 // Attach Click Img Click Event Listener
 document.body.addEventListener('click', clickHandler);
+
+// ==================================
+// ChartJs Implementation
+// ==================================
+
+function makeProductChart() {
+  // [[Names],[Clicks],[Displayed],[% of Clicks vs Display] 
+  var productData = [[],[],[],[]];
+
+  allProducts.forEach(product => {
+    productData[0].push(product.name);
+    productData[1].push(product.clicks);
+    productData[2].push(product.displayed);
+    productData[3].push((product.clicks / product.displayed) * 100)
+  });
+
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: productData[0],
+      datasets: [
+        {
+          label: 'Product Clicks',
+          data: productData[1],
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1,
+          yAxisID: 'first-y-axis'
+        },
+        {
+          label: 'Times Shown',
+          data: productData[2],
+          backgroundColor: 'rgba(51, 188, 255, 0.2)',
+          borderColor: 'rgba(51, 56, 255, 1)',
+          borderWidth: 1,
+          yAxisID: 'first-y-axis'
+        },
+        {
+          label: 'Percent Clicked for Times Shown',
+          data: productData[3],
+          backgroundColor: 'rgba(186, 51, 255, 0.2)',
+          borderColor: 'rgba(120, 21, 229, 0.2)',
+          borderWidth: 1,
+          yAxisID: 'second-y-axis'
+        }
+      ]
+    },
+    options: {
+        scales: {
+          yAxes: [{
+            id: 'first-y-axis',
+            type: 'linear',
+            ticks: {
+              beginAtZero: true
+              }
+            }, {
+            id: 'second-y-axis',
+            type: 'linear'
+            }
+          ]
+        }
+    }
+  })
+}
