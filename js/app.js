@@ -160,7 +160,7 @@ function makeProductChart() {
     productData[0].push(product.name);
     productData[1].push(product.clicks);
     productData[2].push(product.displayed);
-    productData[3].push((product.clicks / product.displayed) * 100)
+    productData[3].push(((product.clicks / product.displayed) * 100).toFixed(2))
   });
 
   var ctx = document.getElementById('myChart').getContext('2d');
@@ -186,7 +186,7 @@ function makeProductChart() {
           yAxisID: 'first-y-axis'
         },
         {
-          label: 'Percent Clicked for Times Shown',
+          label: 'Percent Clicked for Times Shown (%)',
           data: productData[3],
           backgroundColor: 'rgba(186, 51, 255, 0.2)',
           borderColor: 'rgba(120, 21, 229, 0.2)',
@@ -205,7 +205,13 @@ function makeProductChart() {
               }
             }, {
             id: 'second-y-axis',
-            type: 'linear'
+            type: 'linear',
+            ticks: {
+              // Include a % sign in the ticks
+              callback: function(value, index, values) {
+                  return value + '%';
+                }
+              }
             }
           ]
         }
