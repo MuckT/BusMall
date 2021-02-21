@@ -5,7 +5,7 @@ var totalClicks = 0;
 const totalImagesToDisplay = 3;
 const requestedNumberOfClicks = 25;
 var productsOnPage = [];
-const allProducts = [];
+const allProducts = JSON.parse(localStorage.getItem("products")) || [];
 let individualProductNodes = [];
 
 // Constructor
@@ -61,7 +61,7 @@ function generateRandomProduct() {
   return allProducts[Math.floor(Math.random() * allProducts.length)];
 }
 
-// Pick New Products TODO avoid while loops
+// Pick New Products
 function pickNewProducts() {
   let pickedProducts = [];
   while (pickedProducts.length < totalImagesToDisplay) {
@@ -72,6 +72,11 @@ function pickNewProducts() {
   }
   productsOnPage = pickedProducts;
   renderNewProducts(pickedProducts);
+}
+
+// Save Product Click Data for localStorage
+function saveToLocalStorage(products = allProducts) {
+  localStorage.setItem("products", JSON.stringify(allProducts));
 }
 
 // Click Event Handler
@@ -91,6 +96,7 @@ function clickHandler(e) {
     }
   });
   if (totalClicks === requestedNumberOfClicks) {
+    saveToLocalStorage();
     document.body.removeEventListener('click', clickHandler);
     let resultsContainer = document.querySelector('#view-results');
     let button = document.createElement('button');
@@ -110,26 +116,29 @@ function buttonHandler() {
 }
 
 // Create Products
-new Product('bag', 'R2D2 Rolling Bag');
-new Product('banana', 'The Banana Slicer');
-new Product('bathroom', 'iPad Toilet Paper Holder');
-new Product('boots', 'Toe-less Rain Boots');
-new Product('breakfast', 'Toaster Coffee Pot Combo');
-new Product('bubblegum', 'Meatball Bubble Gum');
-new Product('chair', 'Convex chair');
-new Product('cthulhu', 'Cthulhu Action Figure');
-new Product('dog-duck', 'Duck Mask For Dogs');
-new Product('dragon', 'Canned Dragon Meat');
-new Product('pen', 'Pen Cutlery Set');
-new Product('pet-sweep', 'Pet Booties That Clean');
-new Product('scissors', 'Pizza Cutting Sheers');
-new Product('shark', 'Shark Sleeping Bag');
-new Product('sweep', 'Child Onesie That Cleans Floors', '.png');
-new Product('tauntaun', 'Star Wars Sliced Tauntaun Sleeping Bag');
-new Product('unicorn', 'Canned Unicorn Meat');
-new Product('usb', 'Tentical USB', '.gif');
-new Product('water-can', 'Perpetual Water Can');
-new Product('wine-glass', 'A Useless Glass');
+if (localStorage.getItem('products') === null) {
+  new Product('bag', 'R2D2 Rolling Bag');
+  new Product('banana', 'The Banana Slicer');
+  new Product('bathroom', 'iPad Toilet Paper Holder');
+  new Product('boots', 'Toe-less Rain Boots');
+  new Product('breakfast', 'Toaster Coffee Pot Combo');
+  new Product('bubblegum', 'Meatball Bubble Gum');
+  new Product('chair', 'Convex chair');
+  new Product('cthulhu', 'Cthulhu Action Figure');
+  new Product('dog-duck', 'Duck Mask For Dogs');
+  new Product('dragon', 'Canned Dragon Meat');
+  new Product('pen', 'Pen Cutlery Set');
+  new Product('pet-sweep', 'Pet Booties That Clean');
+  new Product('scissors', 'Pizza Cutting Sheers');
+  new Product('shark', 'Shark Sleeping Bag');
+  new Product('sweep', 'Child Onesie That Cleans Floors', '.png');
+  new Product('tauntaun', 'Star Wars Sliced Tauntaun Sleeping Bag');
+  new Product('unicorn', 'Canned Unicorn Meat');
+  new Product('usb', 'Tentical USB', '.gif');
+  new Product('water-can', 'Perpetual Water Can');
+  new Product('wine-glass', 'A Useless Glass');
+}
+
 
 // Create Image Elements to Fill
 createImgElements();

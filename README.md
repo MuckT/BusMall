@@ -13,3 +13,5 @@ A sample website for monitoring click data and displaying the results
 * [Add CSS box shadow around the whole DIV](https://stackoverflow.com/a/28759394/7967484 "Add CSS box shadow around the whole DIV")
 * [Cannot break for-loop: Unsyntactic break](https://stackoverflow.com/a/65088707/7967484 "Cannot break for-loop: Unsyntactic break")
 * [There is no way to stop or break a forEach() loop](https://stackoverflow.com/a/34642904/7967484 "There is no way to stop or break a forEach() loop")
+* [Chart.js](https://www.chartjs.org/ "Chart.js Simple yet flexible JavaScript charting for designers & developers")
+* [Window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage "Window.localStorage")
