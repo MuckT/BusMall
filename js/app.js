@@ -5,7 +5,7 @@ var totalClicks = 0;
 const totalImagesToDisplay = 3;
 const requestedNumberOfClicks = 25;
 var productsOnPage = [];
-const allProducts = JSON.parse(localStorage.getItem("products")) || [];
+const allProducts = JSON.parse(localStorage.getItem('products')) || [];
 let individualProductNodes = [];
 
 // Constructor
@@ -76,7 +76,7 @@ function pickNewProducts() {
 
 // Save Product Click Data for localStorage
 function saveToLocalStorage(products = allProducts) {
-  localStorage.setItem("products", JSON.stringify(allProducts));
+  localStorage.setItem('products', JSON.stringify(products));
 }
 
 // Click Event Handler
@@ -116,7 +116,7 @@ function buttonHandler() {
 }
 
 // Create Products
-if (localStorage.getItem('products') === null) {
+if (!localStorage.getItem('products')) {
   new Product('bag', 'R2D2 Rolling Bag');
   new Product('banana', 'The Banana Slicer');
   new Product('bathroom', 'iPad Toilet Paper Holder');
