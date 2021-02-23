@@ -30,17 +30,23 @@ function createImgElements(numberOfImages = totalImagesToDisplay) {
   }
 }
 
-function adjustCSS(numberOfImages = totalImagesToDisplay) {
-  let numberOfColumns;
-  if (numberOfImages % 5 === 0) {
-    numberOfColumns = 5;
-  } else if (numberOfImages % 4 === 0 ) {
-    numberOfColumns = 4;
-  } else if (numberOfImages % 3 === 0) {
-    numberOfColumns = 3;
-  }
-  if (window.innerWidth > 520) {
-    document.querySelector('main ul').style['grid-template-columns'] = `${'1fr '.repeat(numberOfColumns)}`;
+// Handle resizing of page with JS
+// JS MediaQuery
+const mediaQuery = window.matchMedia('(min-width: 520px)'); 
+// Handle Change Function
+function handleChange(e, numberOfImages = totalImagesToDisplay) {
+  if (e.matches) {
+    let numberOfColumns;
+    if (numberOfImages % 5 === 0) {
+      numberOfColumns = 5;
+    } else if (numberOfImages % 4 === 0 ) {
+      numberOfColumns = 4;
+    } else if (numberOfImages % 3 === 0) {
+      numberOfColumns = 3;
+    }
+    document.querySelector('main ul').style['grid-template-columns'] = '1fr '.repeat(numberOfColumns);
+  } else {
+    document.querySelector('main ul').style['grid-template-columns'] = '1fr';
   }
 }
 
@@ -142,11 +148,14 @@ if (localStorage.getItem('products') === null) {
 
 // Create Image Elements to Fill
 createImgElements();
-adjustCSS();
 pickNewProducts();
+handleChange(mediaQuery)
 
 // Attach Click Img Click Event Listener
 document.body.addEventListener('click', clickHandler);
+// Register Event Listener
+mediaQuery.addEventListener('change', handleChange)
+
 
 // ==================================
 // ChartJs Implementation

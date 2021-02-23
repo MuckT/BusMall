@@ -15,3 +15,4 @@ A sample website for monitoring click data and displaying the results
 * [There is no way to stop or break a forEach() loop](https://stackoverflow.com/a/34642904/7967484 "There is no way to stop or break a forEach() loop")
 * [Chart.js](https://www.chartjs.org/ "Chart.js Simple yet flexible JavaScript charting for designers & developers")
 * [Window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage "Window.localStorage")
+* [Working with JavaScript Media Queries](https://css-tricks.com/working-with-javascript-media-queries/ "Working with JavaScript Media Queries")
